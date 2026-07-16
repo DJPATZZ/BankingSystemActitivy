@@ -1,0 +1,64 @@
+Bank Feutures
+
+Create an account
+Log in using account number and PIN
+
+Check balance
+Deposit money
+Withdraw money
+Transfer money
+View transaction history
+Log out
+
+Account class
+
+Fields:
+- accountNumber
+- accountHolderName
+- pin
+- balance
+- transactionHistory
+
+Methods:
+- deposit()
+- withdraw()
+- transfer()
+- checkBalance()
+- verifyPin()Account number
+
+Transaction class
+
+Bank Class
+
+- collection of Account objects
+
+Methods:
+- createAccount()
+- findAccount()
+- login()
+- transferMoney()
+
+MainController
+
+Main menu
+User input
+Display results
+Call Bank and Account methods
+
+
+
+BankHelper class
+
+Validations rules
+
+isValidDeposit/
+isValidWithdraw/
+isEnoughBalance/
+isValidPin/
+isValidAccountNumber/
+generateAccountNumber/
+
+helper methods for BankHelper
+isNotAllDigit
+has4Digits
+isNotEmpty
