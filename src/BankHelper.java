@@ -1,7 +1,7 @@
 public class BankHelper {
     //Negative deposits
     //Zero deposits
-    public static boolean isValidDeposit(double amount) {
+    public static boolean isValidAmount(double amount) {
         if (amount <= 0) {
             return false;
         } else {
@@ -9,15 +9,6 @@ public class BankHelper {
         }
     }
 
-    //Negative withdrawals
-    //Zero deposits
-    public static boolean isValidWithdraw(double amount) {
-        if (amount <= 0) {
-            return false;
-        } else {
-            return true;
-        }
-    }
 
     //Withdrawal greater than the balance
     public static boolean isEnoughBalance(double balance, double amount) {
@@ -73,6 +64,15 @@ public class BankHelper {
             }
         }
     }
+    public static String generateReferenceNum(Account account) {
+        while (true){
+            int number = (int) Math.floor(Math.random() * 9000000) + 1000000;
+            String referenceNum = Integer.toString(number);
+            if (isNotDuplicatedNumber(account, referenceNum)){
+                return referenceNum;
+            }
+        }
+    }
 
     //isValidName
     public static boolean isValidAccountName(String accountName) {
@@ -80,32 +80,15 @@ public class BankHelper {
         char[] array = accountName.toCharArray();
 
         if (accountName.length() < 2) {
-            throw new IllegalArgumentException("accountName must not be Empty");
+            throw new IllegalArgumentException("Name must be valid.");
         }
-        if (isNotAllDigit(array)) {
-            throw new IllegalArgumentException("accountName must not contain letters.");
-        }
-        if (has6Digits(accountName)) {
-            return true;
-        } else {
-            throw new IllegalArgumentException("Invalid accountName.");
-        }
+        return true;
     }
     public static boolean isValidPassword(String password) {
         password = password.trim();
         char[] array = password.toCharArray();
 
-        if (password.length() < 2) {
-            throw new IllegalArgumentException("password must not be Empty");
-        }
-        if (isNotAllDigit(array)) {
-            throw new IllegalArgumentException("password must not contain letters.");
-        }
-        if (has6Digits(password)) {
-            return true;
-        } else {
-            throw new IllegalArgumentException("Invalid password.");
-        }
+        return true;
     }
     //valid initial balance
     public static boolean isValidInitialBalance(double amount){
@@ -115,12 +98,36 @@ public class BankHelper {
             return false;
         }
     }
+    public static void generateTransactionHistory(Account a, double amount, String type){
+        String referenceNum = generateReferenceNum(a);
+        String receipt = """
+               reference number = """ + referenceNum + """
+               Amount = """ + amount + """
+               Type = """ + type;
+        a.addTransactionHistory(receipt, referenceNum);
+
+    }
+    public static boolean isValidReferenceNum(String referenceNum){
+        char[] refArray = referenceNum.toCharArray();
+        if (isEmpty(referenceNum)){
+            throw new IllegalArgumentException("Invalid reference number.");
+        }
+        if (isNotAllDigit(refArray)){
+            throw new IllegalArgumentException("Invalid reference number. Must not contain letter.");
+        }
+        if (has7Digits(referenceNum)){
+            return true;
+        }else {
+            throw new IllegalArgumentException("Invalid reference number.");
+        }
+
+    }
 
 
     //Helper method
-    private static boolean isNotAllDigit(char[] pinArray) {
+    private static boolean isNotAllDigit(char[] StringArray) {
 
-        for (char c : pinArray) {
+        for (char c : StringArray) {
             if (Character.isDigit(c)) {
                 return false;
             }
@@ -141,6 +148,12 @@ public class BankHelper {
         }
         return false;
     }
+    private static boolean has7Digits(String pin) {
+        if (pin.length() == 7) {
+            return true;
+        }
+        return false;
+    }
 
     private static boolean isEmpty(String input) {
         if (input.isEmpty()) {
@@ -152,6 +165,14 @@ public class BankHelper {
     private static boolean isNotDuplicatedNumber(Bank bank, String number){
         for (Account a : bank.getAccountList()){
             if (number.equals(a.getAccountNumber())){
+                return false;
+            }
+        }
+        return true;
+    }
+    private static boolean isNotDuplicatedNumber(Account account, String referenceNum){
+        for (Transaction a : account.getTransactionHistory()){
+            if (referenceNum.equals(a.getReferenceNum())){
                 return false;
             }
         }

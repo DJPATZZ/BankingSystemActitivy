@@ -8,7 +8,7 @@ public class Account {
     private String accountPassword;
     private String pin;
     private double balance;
-    private ArrayList<String> transactionHistory;
+    private ArrayList<Transaction> transactionHistory;
 
     // Constructor
     public Account(String accountNumber, String accountName, String accountPassword, String pin, double balance) {
@@ -17,6 +17,7 @@ public class Account {
         setAccountPassword(accountPassword);
         setPin(pin);
         setBalance(balance);
+        transactionHistory = new ArrayList<>();
     }
 
     // Getters
@@ -40,7 +41,7 @@ public class Account {
         return balance;
     }
 
-    public ArrayList<String> getTransactionHistory() {
+    public ArrayList<Transaction> getTransactionHistory() {
         return transactionHistory;
     }
 
@@ -65,16 +66,18 @@ public class Account {
         this.balance = balance;
     }
 
-    public void setTransactionHistory(ArrayList<String> transactionHistory) {
-        this.transactionHistory = transactionHistory;
-    }
 
     // Account methods
     public void deposit(double amount) {
         double newBalance = this.balance + amount;
+        setBalance(newBalance);
     }
 
     public void withdraw(double amount) {
         double newBalance = this.balance - amount;
+        setBalance(newBalance);
+    }
+    public void addTransactionHistory(String transactionHistory, String referenceNumber){
+        this.transactionHistory.add(new Transaction(transactionHistory, referenceNumber));
     }
 }
