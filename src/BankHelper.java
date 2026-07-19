@@ -92,7 +92,7 @@ public class BankHelper {
     }
     //valid initial balance
     public static boolean isValidInitialBalance(double amount){
-        if (amount > 100){
+        if (amount >= 100){
             return true;
         }else {
             return false;
@@ -105,7 +105,6 @@ public class BankHelper {
                Amount = """ + amount + """
                Type = """ + type;
         a.addTransactionHistory(receipt, referenceNum);
-
     }
     public static boolean isValidReferenceNum(String referenceNum){
         char[] refArray = referenceNum.toCharArray();

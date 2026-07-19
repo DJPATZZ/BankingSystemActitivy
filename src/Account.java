@@ -7,7 +7,7 @@ public class Account {
     private String accountName;
     private String accountPassword;
     private String pin;
-    private double balance;
+    private double balance = 1000;
     private ArrayList<Transaction> transactionHistory;
 
     // Constructor
@@ -35,6 +35,7 @@ public class Account {
 
     public String getPin() {
         return pin;
+
     }
 
     public double getBalance() {

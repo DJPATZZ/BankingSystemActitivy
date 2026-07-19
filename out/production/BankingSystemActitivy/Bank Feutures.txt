@@ -60,16 +60,5 @@ has4Digits/
 isNotEmpty/
 
 
-Take input
-|
-process choice
-|
 
 
-1. Check balance
-                2. Deposit money
-                3. Withdraw money
-                4. Transfer money
-                5. View transaction history
-                6. Log out
-                Enter Choices:""");
