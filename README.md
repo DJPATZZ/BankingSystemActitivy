@@ -1,8 +1,5 @@
-BANKING SYSTEM DOCUMENTATION
-
-==================================================
 1. BANKING SYSTEM FEATURES
-==================================================
+
 
 - Create an account
   Allows a user to create a new bank account by entering a name, password, PIN, and initial balance.
@@ -32,9 +29,9 @@ BANKING SYSTEM DOCUMENTATION
   Stops the banking program.
 
 
-==================================================
+
 2. ACCOUNT CLASS
-==================================================
+
 
 Purpose:
 The Account class represents one bank account. It stores the account information, balance, and transaction history. It is responsible for changing its own balance.
@@ -118,9 +115,9 @@ Account Methods:
   Creates a Transaction object and adds it to the account's transaction history.
 
 
-==================================================
+
 3. TRANSACTION CLASS
-==================================================
+
 
 Purpose:
 The Transaction class represents one saved account activity, such as a deposit, withdrawal, or transfer.
@@ -155,9 +152,9 @@ Setter Methods:
   Changes the transaction reference number.
 
 
-==================================================
+
 4. BANK CLASS
-==================================================
+
 
 Purpose:
 The Bank class manages all Account objects. It creates accounts, searches for accounts, logs users in, and transfers money between accounts.
@@ -205,9 +202,9 @@ Bank Methods:
   It withdraws money from the sender and deposits it into the receiver.
 
 
-==================================================
+
 5. BANKCONTROLLER CLASS
-==================================================
+
 
 Purpose:
 The BankController class runs the program. It receives user input, displays menus, calls methods from other classes, and controls login and logout.
@@ -256,9 +253,9 @@ Private Controller Methods:
   It rejects invalid, infinite, or non-numeric input.
 
 
-==================================================
+
 6. BANKHELPER CLASS
-==================================================
+
 
 Purpose:
 The BankHelper class is a utility class. It contains static methods for validation, account-number generation, reference-number generation, and transaction-history creation.
@@ -326,28 +323,8 @@ Private Helper Methods:
   Checks that a reference number is not already used in the account's transaction history.
 
 
-==================================================
-7. TESTERMETHOD CLASS
-==================================================
+7. MAIN JAVA APIs USED
 
-Purpose:
-The TesterMethod class tests the important methods without using the full menu system.
-
-Method:
-
-- main(String[] args)
-  Creates sample accounts and tests login, deposit, withdrawal, transfer, transaction history, invalid PIN, and insufficient balance.
-
-Testing API:
-
-- assert
-  Checks whether a condition is true.
-  The program stops with an AssertionError when an enabled assertion fails.
-
-
-==================================================
-8. MAIN JAVA APIs USED
-==================================================
 
 - ArrayList
   A resizable collection used to store Account and Transaction objects.
@@ -428,9 +405,9 @@ Testing API:
   Occurs when text cannot be converted into a number.
 
 
-==================================================
-9. MAIN PROGRAM FLOW
-==================================================
+
+8. MAIN PROGRAM FLOW
+
 
 1. BankController creates a Bank object.
 2. The user chooses login, account creation, or exit.
