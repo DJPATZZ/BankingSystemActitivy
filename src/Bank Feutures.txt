@@ -1,7 +1,7 @@
-Bank feature
+Bank features
 
 Create an account
-Log in using account number and PIN
+Log in using account number and password
 
 Check balance
 Deposit money
@@ -10,57 +10,81 @@ Transfer money
 View transaction history
 Log out
 
+
 Account class
 
 Fields:
-- accountNumber/
-- accountHolderName/
-- pin/
-- balance/
-- transactionHistory/
+- accountNumber
+- accountName
+- accountPassword
+- pin
+- balance
+- transactionHistory
 
 Methods:
-- deposit()/
-- withdraw()/
+- deposit()
+- withdraw()
+- addTransactionHistory()
+
 
 Transaction class
 
-Bank Class
+Fields:
+- transactionHistory
+- referenceNum
 
+Methods:
+- getHistory()
+- getReferenceNum()
+
+
+Bank class
+
+Fields:
 - collection of Account objects
 
 Methods:
-- createAccount()/
-- findAccount()/
-- login()/
-- transferMoney()/
-MainController
+- createAccount()
+- findAccountByNumber()
+- findAccountByName()
+- login()
+- transferMoney()
 
-Main menu
-User input
-Display results
-Call Bank and Account methods
 
+BankController class
+
+Responsibilities:
+- Main menu
+- Authentication menu
+- User input
+- Display results
+- Call Bank methods
+- Call Account methods
+- Log out
+- Exit program
 
 
 BankHelper class
 
-Validations rules
+Validation methods:
+- isValidAmount()
+- isEnoughBalance()
+- isValidPin()
+- isValidAccountNumber()
+- isValidAccountName()
+- isValidPassword()
+- isValidInitialBalance()
+- isValidReferenceNum()
 
-isValidDeposit/
-isValidWithdraw/
-isEnoughBalance/
-isValidPin/
-isValidAccountNumber/
-generateAccountNumber/
+Generation methods:
+- generateAccountNumber()
+- generateReferenceNum()
+- generateTransactionHistory()
 
-helper methods for BankHelper
-isNotAllDigit/
-has4Digits/
-isNotEmpty/
-
-
-
--withdrawing can cause negative balance
--Scanner bug
--
+Private helper methods:
+- isNotAllDigit()
+- has4Digits()
+- has6Digits()
+- has7Digits()
+- isEmpty()
+- isNotDuplicatedNumber()

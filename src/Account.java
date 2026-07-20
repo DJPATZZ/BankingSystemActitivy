@@ -7,17 +7,18 @@ public class Account {
     private String accountName;
     private String accountPassword;
     private String pin;
-    private double balance = 1000;
+    private double balance;
     private ArrayList<Transaction> transactionHistory;
 
     // Constructor
-    public Account(String accountNumber, String accountName, String accountPassword, String pin, double balance) {
-        setAccountNumber(accountNumber);
-        setAccountName(accountName);
-        setAccountPassword(accountPassword);
-        setPin(pin);
+    public Account(String accountNumber, String accountName,
+                   String accountPassword, String pin, double balance) {
+        this.accountNumber = accountNumber;
+        this.accountName = accountName;
+        this.accountPassword = accountPassword;
+        this.pin = pin;
         setBalance(balance);
-        transactionHistory = new ArrayList<>();
+        this.transactionHistory = new ArrayList<>();
     }
 
     // Getters
@@ -29,13 +30,12 @@ public class Account {
         return accountName;
     }
 
-    public String getAccountPassword(){
-        return this.accountPassword;
+    public String getAccountPassword() {
+        return accountPassword;
     }
 
     public String getPin() {
         return pin;
-
     }
 
     public double getBalance() {
@@ -55,8 +55,8 @@ public class Account {
         this.accountName = accountName;
     }
 
-    public void setAccountPassword(String accountPassword){
-        this.accountPassword = accountName;
+    public void setAccountPassword(String accountPassword) {
+        this.accountPassword = accountPassword;
     }
 
     public void setPin(String pin) {
@@ -64,21 +64,44 @@ public class Account {
     }
 
     public void setBalance(double balance) {
+        if (!Double.isFinite(balance) || balance < 0) {
+            throw new IllegalArgumentException(
+                    "Balance cannot be negative or invalid."
+            );
+        }
+
         this.balance = balance;
     }
 
-
     // Account methods
     public void deposit(double amount) {
-        double newBalance = this.balance + amount;
-        setBalance(newBalance);
+        if (!BankHelper.isValidAmount(amount)) {
+            throw new IllegalArgumentException(
+                    "Deposit must be greater than zero."
+            );
+        }
+
+        setBalance(balance + amount);
     }
 
     public void withdraw(double amount) {
-        double newBalance = this.balance - amount;
-        setBalance(newBalance);
+        if (!BankHelper.isValidAmount(amount)) {
+            throw new IllegalArgumentException(
+                    "Withdrawal must be greater than zero."
+            );
+        }
+
+        if (!BankHelper.isEnoughBalance(balance, amount)) {
+            throw new IllegalArgumentException("Insufficient balance.");
+        }
+
+        setBalance(balance - amount);
     }
-    public void addTransactionHistory(String transactionHistory, String referenceNumber){
-        this.transactionHistory.add(new Transaction(transactionHistory, referenceNumber));
+
+    public void addTransactionHistory(String transactionHistory,
+                                      String referenceNumber) {
+        this.transactionHistory.add(
+                new Transaction(transactionHistory, referenceNumber)
+        );
     }
 }

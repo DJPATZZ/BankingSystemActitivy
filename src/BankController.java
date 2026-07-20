@@ -1,57 +1,53 @@
 import java.util.Scanner;
-import java.util.InputMismatchException;
 
 public class BankController {
+
     static boolean running = true;
     static Account a = null;
 
     public static void main(String[] args) {
-        //initialize objects
         Scanner sc = new Scanner(System.in);
-        //initialize bank object
         Bank bank = new Bank();
 
-        //authenticate user
         while (running) {
-            while (true) {
-                try {
-                    if (authenticate(bank, sc)){
-                        System.out.println("Login successfully.");
-                        break;
-                    }else{
-                        System.out.println("Login unsuccessfully.");
-                        break;
 
-                    }
-                } catch (IllegalArgumentException | NullPointerException e) {
-                    System.out.println(e.getMessage());
-                } catch (InputMismatchException e) {
-                    System.out.println(e.getMessage());
-                    sc.nextLine();
+            // Authentication menu
+            while (running && a == null) {
+                try {
+                    authenticate(bank, sc);
+                } catch (IllegalArgumentException exception) {
+                    System.out.println(
+                            exception.getMessage()
+                    );
                 }
             }
-            if (!running){
-                continue;
-            }
-            while (true) {
+
+            // Account menu
+            while (running && a != null) {
                 try {
                     printMenu();
-                    int c = sc.nextInt();
-                    processInput(bank, a, sc, c);
 
-                } catch (IllegalArgumentException | NullPointerException e) {
-                    System.out.println(e.getMessage());
-                } catch (InputMismatchException e) {
-                    System.out.println("Invalid Input");
-                    sc.nextLine();
+                    int choice = readInt(sc);
+
+                    processInput(
+                            bank,
+                            a,
+                            sc,
+                            choice
+                    );
+                } catch (IllegalArgumentException exception) {
+                    System.out.println(
+                            exception.getMessage()
+                    );
                 }
             }
         }
 
+        sc.close();
 
+        System.out.println("Program ended.");
     }
 
-    //Controller Methods
     public static void printMenu() {
         System.out.println("""
                 1. Check balance
@@ -60,171 +56,339 @@ public class BankController {
                 4. Transfer money
                 5. View transaction history
                 6. Log out
-                Enter Choices:""");
+                Enter choice:
+                """);
     }
 
-    public static void processInput(Bank bank, Account a, Scanner sc, int c) {
+    public static void processInput(
+            Bank bank,
+            Account a,
+            Scanner sc,
+            int c
+    ) {
         if (c == 1) {
-            System.out.println("Available balance: " + a.getBalance());
+            System.out.printf(
+                    "Available balance: %.2f%n",
+                    a.getBalance()
+            );
+
+            return;
         }
+
         if (c == 2) {
-            System.out.println("Enter amount to deposit: ");
-            double amount = 0;
-            String type = "Deposit";
-            while (true) {
-                amount = sc.nextDouble();
-                if (BankHelper.isValidAmount(amount)) {
-                    a.deposit(amount);
-                    System.out.println("Successfully deposited: " + amount);
-                    BankHelper.generateTransactionHistory(a, amount, type);
-                    break;
-                }
-            }
+            System.out.println(
+                    "Enter amount to deposit:"
+            );
 
+            double amount = readDouble(sc);
+
+            a.deposit(amount);
+
+            BankHelper.generateTransactionHistory(
+                    a,
+                    amount,
+                    "Deposit"
+            );
+
+            System.out.printf(
+                    "Successfully deposited: %.2f%n",
+                    amount
+            );
+
+            return;
         }
+
         if (c == 3) {
-            System.out.println("Enter amount to withdraw: ");
-            double amount = 0;
-            String type = "Withdraw";
-            while (true) {
-                amount = sc.nextDouble();
-                if (BankHelper.isValidAmount(amount)) {
-                    a.withdraw(amount);
-                    System.out.println("Successfully withdraw: " + amount);
-                    BankHelper.generateTransactionHistory(a, amount, type);
-                    break;
-                }
-            }
+            System.out.println(
+                    "Enter amount to withdraw:"
+            );
+
+            double amount = readDouble(sc);
+
+            a.withdraw(amount);
+
+            BankHelper.generateTransactionHistory(
+                    a,
+                    amount,
+                    "Withdraw"
+            );
+
+            System.out.printf(
+                    "Successfully withdrew: %.2f%n",
+                    amount
+            );
+
+            return;
         }
+
         if (c == 4) {
-            String sender = a.getAccountNumber();
-            String receiver;
-            double amount = 0;
-            String type = "Transfer";
+            String sender =
+                    a.getAccountNumber();
 
-            System.out.println("Enter account number to transfer: ");
-            while (true) {
-                receiver = sc.nextLine();
-                if (BankHelper.isValidAccountNumber(receiver)) {
-                    break;
-                }
+            System.out.println(
+                    "Enter account number to transfer to:"
+            );
+
+            String receiver =
+                    sc.nextLine().trim();
+
+            BankHelper.isValidAccountNumber(receiver);
+
+            System.out.println("Enter amount:");
+
+            double amount = readDouble(sc);
+
+            if (bank.transferMoney(
+                    sender,
+                    receiver,
+                    amount
+            )) {
+                Account receiverAccount =
+                        bank.findAccountByNumber(receiver);
+
+                BankHelper.generateTransactionHistory(
+                        a,
+                        amount,
+                        "Transfer sent to " + receiver
+                );
+
+                BankHelper.generateTransactionHistory(
+                        receiverAccount,
+                        amount,
+                        "Transfer received from " + sender
+                );
+
+                System.out.printf(
+                        "Successfully transferred %.2f to %s%n",
+                        amount,
+                        receiver
+                );
             }
-            for (Account found : bank.getAccountList()) {
-                if (found.getAccountNumber().equals(receiver)) {
-                    break;
-                } else {
-                    throw new NullPointerException("No account exist.");
-                }
-            }
-            System.out.println("Enter amount: ");
-            while (true) {
-                amount = sc.nextDouble();
-                if (BankHelper.isValidAmount(amount)) {
-                    break;
-                }
-            }
-            if (bank.transferMoney(sender, receiver, amount)) {
-                System.out.println("Successfully transferred " + amount + " to " + receiver);
-                BankHelper.generateTransactionHistory(a, amount, type);
-            }
+
+            return;
         }
+
         if (c == 5) {
-            for (Transaction t : a.getTransactionHistory()) {
-                System.out.println("Reference " + t.getReferenceNum());
-            }
-            System.out.println("Select an reference number: ");
-            String referenceNum = sc.nextLine();
-            if (BankHelper.isValidReferenceNum(referenceNum)) {
-
-            }
+            viewTransactionHistory(a, sc);
+            return;
         }
+
         if (c == 6) {
+            BankController.a = null;
 
+            System.out.println(
+                    "Logged out successfully."
+            );
+
+            return;
         }
+
+        throw new IllegalArgumentException(
+                "Invalid menu choice."
+        );
     }
 
-    public static boolean authenticate(Bank bank, Scanner sc)throws InputMismatchException{
+    public static boolean authenticate(
+            Bank bank,
+            Scanner sc
+    ) {
         System.out.println("""
                 1. Log in
                 2. Create Account
                 0. Exit
-                Enter Choices:""");
-        int c = sc.nextInt();
-        sc.nextLine();
+                Enter choice:
+                """);
+
+        int c = readInt(sc);
 
         if (c == 1) {
-            //declare
-            String number = null;
-            String password = null;
+            System.out.println(
+                    "Enter account number:"
+            );
 
-            System.out.println("Enter account number: ");
-            while (true){
-                number = sc.nextLine();
+            String number =
+                    sc.nextLine().trim();
 
-                if (BankHelper.isValidAccountNumber(number)){
-                    break;
-                }
-            }
+            BankHelper.isValidAccountNumber(number);
 
-            System.out.println("Enter account password: ");
-            while (true){
-                password = sc.nextLine();
-                if (BankHelper.isValidPassword(password)){
-                    break;
-                }
-            }
-            BankController.a = a;
-            a = bank.login(password, number);
+            System.out.println(
+                    "Enter account password:"
+            );
+
+            String password =
+                    sc.nextLine();
+
+            BankHelper.isValidPassword(password);
+
+            BankController.a =
+                    bank.login(password, number);
+
+            System.out.println(
+                    "Login successful."
+            );
 
             return true;
         }
+
         if (c == 2) {
-            String number, name, password, pin;
-            double balance;
-            number = BankHelper.generateAccountNumber(bank);
-            while (true) {
-                System.out.println("Enter name: ");
-                name = sc.nextLine();
-                if (BankHelper.isValidAccountName(name)) {
-                    break;
-                }
-            }
-            while (true) {
-                System.out.println("Enter password: ");
-                password = sc.nextLine();
-                if (BankHelper.isValidPassword(password)) {
-                    break;
-                }
-            }
-            while (true) {
-                System.out.println("Enter 4 digit pin: ");
-                pin = sc.nextLine();
-                pin = pin.trim();
+            String number =
+                    BankHelper.generateAccountNumber(bank);
 
-                if (BankHelper.isValidPin(pin)) {
-                    break;
-                }
+            System.out.println("Enter name:");
+
+            String name =
+                    sc.nextLine().trim();
+
+            BankHelper.isValidAccountName(name);
+
+            System.out.println("Enter password:");
+
+            String password =
+                    sc.nextLine();
+
+            BankHelper.isValidPassword(password);
+
+            System.out.println(
+                    "Enter 4-digit PIN:"
+            );
+
+            String pin =
+                    sc.nextLine().trim();
+
+            BankHelper.isValidPin(pin);
+
+            System.out.println(
+                    "Enter initial balance "
+                            + "(must be at least 100):"
+            );
+
+            double balance =
+                    readDouble(sc);
+
+            if (!BankHelper.isValidInitialBalance(
+                    balance
+            )) {
+                throw new IllegalArgumentException(
+                        "Initial balance must be at least 100."
+                );
             }
-            while (true) {
-                System.out.println("Enter initial balance (must equal or great than 100): ");
-                balance = sc.nextDouble();
-                if (BankHelper.isValidInitialBalance(balance)) {
-                    break;
-                }
-            }
-            Account a = new Account(number, name, password, pin, balance);
-            BankController.a = a;
-            bank.createAccount(a);
+
+            Account account = new Account(
+                    number,
+                    name,
+                    password,
+                    pin,
+                    balance
+            );
+
+            bank.createAccount(account);
+
+            BankController.a = account;
+
+            System.out.println(
+                    "Account created successfully."
+            );
+
+            System.out.println(
+                    "Your account number is: " + number
+            );
+
             return true;
-
         }
+
         if (c == 0) {
             running = false;
             return false;
-
         }
-        return false;
+
+        throw new IllegalArgumentException(
+                "Invalid authentication choice."
+        );
     }
 
-}
+    private static void viewTransactionHistory(
+            Account account,
+            Scanner sc
+    ) {
+        if (account.getTransactionHistory().isEmpty()) {
+            System.out.println(
+                    "No transaction history."
+            );
 
+            return;
+        }
+
+        System.out.println(
+                "Transaction references:"
+        );
+
+        for (Transaction transaction
+                : account.getTransactionHistory()) {
+            System.out.println(
+                    transaction.getReferenceNum()
+            );
+        }
+
+        System.out.println(
+                "Select a reference number:"
+        );
+
+        String referenceNum =
+                sc.nextLine().trim();
+
+        BankHelper.isValidReferenceNum(referenceNum);
+
+        for (Transaction transaction
+                : account.getTransactionHistory()) {
+            if (referenceNum.equals(
+                    transaction.getReferenceNum()
+            )) {
+                System.out.println(
+                        transaction.getHistory()
+                );
+
+                return;
+            }
+        }
+
+        throw new IllegalArgumentException(
+                "Transaction does not exist."
+        );
+    }
+
+    private static int readInt(Scanner sc) {
+        String input =
+                sc.nextLine().trim();
+
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException exception) {
+            throw new IllegalArgumentException(
+                    "Enter a valid whole number."
+            );
+        }
+    }
+
+    private static double readDouble(Scanner sc) {
+        String input =
+                sc.nextLine().trim();
+
+        try {
+            double number =
+                    Double.parseDouble(input);
+
+            if (!Double.isFinite(number)) {
+                throw new IllegalArgumentException(
+                        "Enter a valid amount."
+                );
+            }
+
+            return number;
+
+        } catch (NumberFormatException exception) {
+            throw new IllegalArgumentException(
+                    "Enter a valid number."
+            );
+        }
+    }
+}
