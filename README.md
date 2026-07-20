@@ -1,422 +1,299 @@
 1. BANKING SYSTEM FEATURES
 
-
 - Create an account
-  Allows a user to create a new bank account by entering a name, password, PIN, and initial balance.
+Allows a user to create a new bank account by providing a name, password, PIN, and initial balance.
 
 - Log in using account number and password
-  Allows an existing user to access an account using the generated account number and saved password.
+Allows an existing user to log in by providing the account number and password.
 
 - Check balance
-  Displays the current amount of money stored in the logged-in account.
+Shows the current amount of money in the logged account.
 
 - Deposit money
-  Adds a valid amount of money to the account balance.
+Adds a valid amount of money to the account balance.
 
 - Withdraw money
-  Removes a valid amount from the account balance if enough money is available.
+Subtracts a valid amount of money from the account balance if there are enough funds.
 
 - Transfer money
-  Moves money from the logged-in account to another existing account.
+Transfers a valid amount of money from the logged account to another existing account.
 
 - View transaction history
-  Displays saved deposits, withdrawals, and transfers using transaction reference numbers.
+Shows the list of all deposits, withdrawals, and transfers with reference numbers.
 
 - Log out
-  Ends the current account session and returns the user to the authentication menu.
+Closes the current account session and takes the user back to the authentication menu.
 
 - Exit
-  Stops the banking program.
-
-
+Exits the banking application.
 
 2. ACCOUNT CLASS
 
-
 Purpose:
-The Account class represents one bank account. It stores the account information, balance, and transaction history. It is responsible for changing its own balance.
+The Account class stores account data, balance, and transaction history. It also contains methods for changing the account balance.
 
 Fields:
 
 - private String accountNumber
-  Stores the unique six-digit number used to identify the account.
+Stores the account number as a six-digit string.
 
 - private String accountName
-  Stores the name of the account owner.
+Stores the account name.
 
 - private String accountPassword
-  Stores the password used to log in to the account.
+
+Stores the account password.
 
 - private String pin
-  Stores the four-digit PIN used for account security.
+Stores the account PIN as a four-digit string.
 
 - private double balance
-  Stores the current amount of money available in the account.
 
-- private ArrayList<Transaction> transactionHistory
-  Stores all Transaction objects connected to the account.
+Stores the current account balance as a double value.
+
+- private ArrayList transactionHistory
+
+Stores the list of all account transactions.
 
 Constructor:
 
 - Account(String accountNumber, String accountName,
-          String accountPassword, String pin, double balance)
-  Creates a new Account object and gives its fields their starting values.
-  It also creates an empty transaction history list.
 
+String accountPassword, String pin, double balance)
+
+Initializes a new instance of the Account class.
+Sets initial values for account fields.
+Sets an empty transaction history list.
 Getter Methods:
-
 - getAccountNumber()
-  Returns the account number.
 
+Returns the account number.
 - getAccountName()
-  Returns the account owner's name.
-
+Returns the account name.
 - getAccountPassword()
-  Returns the saved account password.
-
+Returns the account password.
 - getPin()
-  Returns the saved PIN.
-
+Returns the account PIN.
 - getBalance()
-  Returns the current account balance.
-
+Returns the account balance.
 - getTransactionHistory()
-  Returns the list of Transaction objects stored in the account.
-
+Returns the list of account transactions.
 Setter Methods:
-
 - setAccountNumber(String accountNumber)
-  Changes the account number field.
-
+Sets a new account number.
 - setAccountName(String accountName)
-  Changes the account owner's name.
-
+Sets a new account name.
 - setAccountPassword(String accountPassword)
-  Changes the account password.
-
+Sets a new account password.
 - setPin(String pin)
-  Changes the account PIN.
-
+Sets a new account PIN.
 - setBalance(double balance)
-  Changes the account balance.
-  It rejects negative, infinite, or invalid values.
-
+Sets a new account balance.
+Rejects negative, infinite, and NaN values.
 Account Methods:
-
 - deposit(double amount)
-  Adds a valid amount to the current balance.
-
+Adds a valid amount of money to the account balance.
 - withdraw(double amount)
-  Removes a valid amount from the current balance.
-  It rejects the operation when the account does not have enough money.
-
+Subtracts a valid amount of money from the account balance.
+Rejects the operation if there are not enough funds.
 - addTransactionHistory(String transactionHistory,
-                        String referenceNumber)
-  Creates a Transaction object and adds it to the account's transaction history.
-
-
-
+String referenceNumber)
+Creates a new Transaction instance.
+Adds the transaction to the account transaction history list.
 3. TRANSACTION CLASS
-
-
 Purpose:
-The Transaction class represents one saved account activity, such as a deposit, withdrawal, or transfer.
-
+The Transaction class stores the account transaction data such as transaction history and reference number.
 Fields:
-
 - private String transactionHistory
-  Stores the complete transaction information.
-
+Stores the full transaction history string.
 - private String referenceNum
-  Stores the unique seven-digit reference number of the transaction.
-
+Stores the transaction reference number as a seven-digit string.
 Constructor:
-
 - Transaction(String transactionHistory, String referenceNum)
-  Creates a Transaction object and gives it a history description and reference number.
-
+Initializes a new instance of the Transaction class.
 Getter Methods:
-
 - getHistory()
-  Returns the complete transaction information.
-
+Returns the transaction history.
 - getReferenceNum()
-  Returns the transaction reference number.
-
+Returns the transaction reference number.
 Setter Methods:
-
 - setTransactionHistory(String transactionHistory)
-  Changes the saved transaction information.
-
+Sets a new transaction history.
 - setReferenceNum(String referenceNum)
-  Changes the transaction reference number.
-
-
-
+Sets a new transaction reference number.
 4. BANK CLASS
-
-
 Purpose:
-The Bank class manages all Account objects. It creates accounts, searches for accounts, logs users in, and transfers money between accounts.
-
+The Bank class contains methods for managing all accounts. It also contains methods for finding accounts, logging in, and transferring money between accounts.
 Field:
-
-- private ArrayList<Account> accountList
-  Stores all Account objects registered in the banking system.
-
+- private ArrayList accountList
+Stores the list of all accounts.
 Constructor:
-
 - Bank()
-  Creates a Bank object with an empty account list.
-
+Initializes a new instance of the Bank class.
 Getter Method:
-
 - getAccountList()
-  Returns the collection of Account objects.
-
+Returns the account list.
 Setter Method:
-
-- setAccountList(ArrayList<Account> accountList)
-  Replaces the current account list with another valid account list.
-
+- setAccountList(ArrayList accountList)
+Sets a new account list.
 Bank Methods:
-
 - createAccount(Account account)
-  Adds a new Account object to the bank.
-  It rejects null accounts and duplicated account numbers.
-
+Adds a new account to the account list.
+Rejects null accounts and accounts with duplicate account numbers.
 - findAccountByNumber(String accountNumber)
-  Searches the account list using an account number.
-  It returns the matching Account object.
-
+Finds an account by number.
+Returns the account instance.
 - findAccountByName(String accountName)
-  Searches the account list using the account owner's name.
-
+Finds an account by name.
 - login(String accountPassword, String accountNumber)
-  Finds the account using the account number and checks whether the password is correct.
-
+Finds an account by number.
+Checks if the account password matches.
 - transferMoney(String senderAccountNumber,
-                String receiverAccountNumber,
-                double amount)
-  Finds the sender and receiver accounts.
-  It withdraws money from the sender and deposits it into the receiver.
-
-
-
+String receiverAccountNumber,
+double amount)
+Finds the sender and receiver accounts.
+Subtracts the amount from the sender account.
+Adds the amount to the receiver account.
 5. BANKCONTROLLER CLASS
-
-
 Purpose:
-The BankController class runs the program. It receives user input, displays menus, calls methods from other classes, and controls login and logout.
-
+The BankController class contains the main program loop. It reads and processes the user input. It also contains methods for logging in and out and for displaying account operations menu.
 Static Fields:
-
 - static boolean running
-  Controls whether the whole banking program continues running.
-
+Indicates if the application is running.
 - static Account a
-  Stores the reference to the currently logged-in Account object.
-  A null value means that no account is logged in.
-
+Stores the currently logged account instance.
+The null value means that no account is logged in.
 Main Method:
-
 - main(String[] args)
-  Starts the program.
-  It creates the Scanner and Bank objects.
-  It controls the authentication menu and account menu.
-
+The main program loop.
+Initializes the scanner and bank instances.
+Shows the authentication menu and account menu.
 Controller Methods:
-
 - printMenu()
-  Displays the account operations menu.
-
+Shows the account operations menu.
 - processInput(Bank bank, Account a, Scanner sc, int c)
-  Processes the selected account-menu option.
-  It handles balance checking, deposit, withdrawal, transfer, history, and logout.
-
+Processes the account menu input.
+Calls appropriate methods based on the input.
 - authenticate(Bank bank, Scanner sc)
-  Displays the login, account creation, and exit menu.
-  It logs in an existing user or creates a new account.
-
+Shows the authentication menu.
+Logs in an existing user or creates a new account.
 Private Controller Methods:
-
 - viewTransactionHistory(Account account, Scanner sc)
-  Displays transaction reference numbers.
-  It searches for and displays the selected transaction.
-
+Shows the transaction history reference numbers.
+Finds and shows the transaction details.
 - readInt(Scanner sc)
-  Reads a complete line and converts it into an int.
-  It rejects invalid whole-number input.
-
+Reads an integer from the console.
+Rejects invalid input.
 - readDouble(Scanner sc)
-  Reads a complete line and converts it into a double.
-  It rejects invalid, infinite, or non-numeric input.
-
-
-
+Reads a double value from the console.
+Rejects invalid input.
 6. BANKHELPER CLASS
-
-
 Purpose:
-The BankHelper class is a utility class. It contains static methods for validation, account-number generation, reference-number generation, and transaction-history creation.
-
+The BankHelper class contains helper methods for account validation, account number and reference number generation, and transaction history creation.
 Public Validation Methods:
-
 - isValidAmount(double amount)
-  Returns true when the amount is finite and greater than zero.
-
+Returns true if the amount is a finite positive value.
 - isEnoughBalance(double balance, double amount)
-  Returns true when the amount is valid and the balance is enough.
-
+Returns true if the amount is valid and the account has enough balance.
 - isValidPin(String pin)
-  Checks that the PIN is not empty, contains digits only, and has exactly four digits.
-
+Checks if the PIN is not empty, has only digits, and has four digits.
 - isValidAccountNumber(String accountNumber)
-  Checks that the account number is not empty, contains digits only, and has exactly six digits.
-
+Checks if the account number is not empty, has only digits, and has six digits.
 - isValidAccountName(String accountName)
-  Checks that the name has at least two characters and contains only letters and spaces.
-
+Checks if the account name is not empty, has at least two characters, and has only letters and spaces.
 - isValidPassword(String password)
-  Checks that the password is not empty and contains at least four characters.
-
+Checks if the password is not empty and has at least four characters.
 - isValidInitialBalance(double amount)
-  Returns true when the starting balance is finite and at least 100.
-
+Returns true if the initial balance is a finite positive value greater than 100.
 - isValidReferenceNum(String referenceNum)
-  Checks that the reference number is not empty, contains digits only, and has exactly seven digits.
-
+Checks if the reference number is not empty, has only digits, and has seven digits.
 Public Generation Methods:
-
 - generateAccountNumber(Bank bank)
-  Generates a unique six-digit account number.
-
+Generates a six-digit account number.
 - generateReferenceNum(Account account)
-  Generates a unique seven-digit transaction reference number.
-
+Generates a seven-digit reference number.
 - generateTransactionHistory(Account account,
-                             double amount,
-                             String type)
-  Creates a formatted transaction description and adds it to the account history.
-
+double amount,
+String type)
+Generates a formatted transaction history string.
+Adds the transaction to the account transaction history list.
 Private Helper Methods:
-
 - isNotAllDigit(char[] stringArray)
-  Returns true when at least one character is not a digit.
-
+Returns true if the string array is not all digits.
 - has4Digits(String pin)
-  Returns true when the string contains exactly four characters.
-
+Returns true if the string has four digits.
 - has6Digits(String accountNumber)
-  Returns true when the string contains exactly six characters.
-
+Returns true if the string has six digits.
 - has7Digits(String referenceNum)
-  Returns true when the string contains exactly seven characters.
-
+Returns true if the string has seven digits.
 - isEmpty(String input)
-  Returns true when the input is null, empty, or contains spaces only.
-
+Returns true if the string is empty or has only whitespace characters.
 - isNotDuplicatedNumber(Bank bank, String number)
-  Checks that an account number is not already used by another account.
-
+Checks if the account number is not duplicated.
 - isNotDuplicatedNumber(Account account, String referenceNum)
-  Checks that a reference number is not already used in the account's transaction history.
-
-
+Checks if the reference number is not duplicated in the account transaction history.
 7. MAIN JAVA APIs USED
-
-
 - ArrayList
-  A resizable collection used to store Account and Transaction objects.
-
+Used for storing Account and Transaction objects.
 - ArrayList.add()
-  Adds an object to an ArrayList.
-
+Adds an object to an ArrayList.
 - ArrayList.isEmpty()
-  Checks whether an ArrayList contains no elements.
-
+Checks whether an ArrayList is empty.
 - ArrayList.size()
-  Returns the number of stored elements.
-
+Returns the size of an ArrayList.
 - Scanner
-  Reads keyboard input.
-
+Reads the user input.
 - Scanner.nextLine()
-  Reads one complete line of input as a String.
-
+Reads the next line of input as a string.
 - Scanner.close()
-  Closes the Scanner after the program ends.
-
+Closes the scanner.
 - Integer.parseInt()
-  Converts a String into an int.
-
+Converts a string to an integer.
 - Integer.toString()
-  Converts an int into a String.
-
+Converts an integer to a string.
 - Double.parseDouble()
-  Converts a String into a double.
-
+Converts a string to a double.
 - Double.isFinite()
-  Checks whether a double is a valid finite number.
-
+Checks whether a double is a finite number.
 - Math.random()
-  Produces a random double from 0.0 up to, but not including, 1.0.
-
+Returns a random double between 0.0 and 1.0.
 - Character.isDigit()
-  Checks whether a character is a digit.
-
+Checks whether a character is a digit.
 - Character.isLetter()
-  Checks whether a character is a letter.
-
+Checks whether a character is a letter.
 - Character.isWhitespace()
-  Checks whether a character is a space or another whitespace character.
-
+Checks whether a character is a whitespace.
 - String.trim()
-  Removes spaces from the beginning and end of a String.
-
+Removes whitespace from both ends of a string.
 - String.isEmpty()
-  Checks whether a String contains zero characters.
-
+Checks whether a string is empty.
 - String.length()
-  Returns the number of characters in a String.
-
+Returns the length of a string.
 - String.toCharArray()
-  Converts a String into an array of characters.
-
+Converts a string to a character array.
 - String.equals()
-  Compares the content of two Strings.
-
+Compares the content of two strings.
 - String.equalsIgnoreCase()
-  Compares two Strings without considering letter case.
-
+Compares the content of two strings ignoring the case.
 - String.formatted()
-  Inserts values into a formatted String.
-
+Formats a string.
 - System.out.println()
-  Prints text and moves to the next line.
-
+Prints a line of text.
 - System.out.printf()
-  Prints formatted text.
-
+Prints formatted text.
 - IllegalArgumentException
-  Represents invalid input or an invalid operation.
-
+Thrown to indicate that a method has received invalid arguments.
 - NumberFormatException
-  Occurs when text cannot be converted into a number.
-
-
-
+Thrown when an invalid string is parsed into a number.
 8. MAIN PROGRAM FLOW
-
-
-1. BankController creates a Bank object.
-2. The user chooses login, account creation, or exit.
-3. A created account is added to Bank.accountList.
-4. A logged-in Account reference is stored in BankController.a.
-5. BankController receives a menu choice.
-6. It calls the correct Bank or Account method.
-7. Account changes its own balance.
-8. BankHelper validates data and creates transaction records.
-9. Transaction objects are stored inside Account.transactionHistory.
-10. Logout sets BankController.a to null.
+1. BankController creates a Bank instance.
+2. The user selects an option to log in, create an account, or exit.
+3. The created account is added to Bank.accountList.
+4. The logged account instance is stored in BankController.a.
+5. The BankController receives the account menu input.
+6. The BankController calls the appropriate Bank or Account method.
+7. The Account instance updates its balance.
+8. The BankHelper validates the input and creates transaction records.
+9. The Transaction instances are added to Account.transactionHistory.
+10. Logging out sets the BankController.a to null.
 11. The program returns to the authentication menu.
