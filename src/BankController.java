@@ -20,10 +20,8 @@ public class BankController {
                         break;
                     }else{
                         System.out.println("Login unsuccessfully.");
+                        break;
 
-                    }
-                    if (!running) {
-                        continue;
                     }
                 } catch (IllegalArgumentException | NullPointerException e) {
                     System.out.println(e.getMessage());
@@ -31,6 +29,9 @@ public class BankController {
                     System.out.println(e.getMessage());
                     sc.nextLine();
                 }
+            }
+            if (!running){
+                continue;
             }
             while (true) {
                 try {
@@ -148,13 +149,33 @@ public class BankController {
                 0. Exit
                 Enter Choices:""");
         int c = sc.nextInt();
+        sc.nextLine();
 
         if (c == 1) {
+            //declare
+            String number = null;
+            String password = null;
+
             System.out.println("Enter account number: ");
-            String number = sc.nextLine();
+            while (true){
+                number = sc.nextLine();
+
+                if (BankHelper.isValidAccountNumber(number)){
+                    break;
+                }
+            }
+
             System.out.println("Enter account password: ");
-            String password = sc.nextLine();
+            while (true){
+                password = sc.nextLine();
+                if (BankHelper.isValidPassword(password)){
+                    break;
+                }
+            }
+
+            System.out.println(password + number);
             a = bank.login(password, number);
+
             return true;
         }
         if (c == 2) {
@@ -179,7 +200,6 @@ public class BankController {
                 System.out.println("Enter 4 digit pin: ");
                 pin = sc.nextLine();
                 pin = pin.trim();
-                sc.nextLine();
 
                 if (BankHelper.isValidPin(pin)) {
                     break;
@@ -199,6 +219,7 @@ public class BankController {
         }
         if (c == 0) {
             running = false;
+            return false;
 
         }
         return false;
