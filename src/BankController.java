@@ -38,6 +38,7 @@ public class BankController {
                     printMenu();
                     int c = sc.nextInt();
                     processInput(bank, a, sc, c);
+
                 } catch (IllegalArgumentException | NullPointerException e) {
                     System.out.println(e.getMessage());
                 } catch (InputMismatchException e) {
@@ -172,8 +173,7 @@ public class BankController {
                     break;
                 }
             }
-
-            System.out.println(password + number);
+            BankController.a = a;
             a = bank.login(password, number);
 
             return true;
@@ -213,6 +213,7 @@ public class BankController {
                 }
             }
             Account a = new Account(number, name, password, pin, balance);
+            BankController.a = a;
             bank.createAccount(a);
             return true;
 
