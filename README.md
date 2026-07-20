@@ -1,1 +1,90 @@
-# BankingSystemActitivy
+Bank features
+
+Create an account
+Log in using account number and password
+
+Check balance
+Deposit money
+Withdraw money
+Transfer money
+View transaction history
+Log out
+
+
+Account class
+
+Fields:
+- accountNumber
+- accountName
+- accountPassword
+- pin
+- balance
+- transactionHistory
+
+Methods:
+- deposit()
+- withdraw()
+- addTransactionHistory()
+
+
+Transaction class
+
+Fields:
+- transactionHistory
+- referenceNum
+
+Methods:
+- getHistory()
+- getReferenceNum()
+
+
+Bank class
+
+Fields:
+- collection of Account objects
+
+Methods:
+- createAccount()
+- findAccountByNumber()
+- findAccountByName()
+- login()
+- transferMoney()
+
+
+BankController class
+
+Responsibilities:
+- Main menu
+- Authentication menu
+- User input
+- Display results
+- Call Bank methods
+- Call Account methods
+- Log out
+- Exit program
+
+
+BankHelper class
+
+Validation methods:
+- isValidAmount()
+- isEnoughBalance()
+- isValidPin()
+- isValidAccountNumber()
+- isValidAccountName()
+- isValidPassword()
+- isValidInitialBalance()
+- isValidReferenceNum()
+
+Generation methods:
+- generateAccountNumber()
+- generateReferenceNum()
+- generateTransactionHistory()
+
+Private helper methods:
+- isNotAllDigit()
+- has4Digits()
+- has6Digits()
+- has7Digits()
+- isEmpty()
+- isNotDuplicatedNumber()
